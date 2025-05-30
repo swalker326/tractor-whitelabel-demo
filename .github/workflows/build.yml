@@ -30,6 +30,8 @@ jobs:
     
     - name: Build John Deere app
       id: build-john-deere
+      env:
+        ZE_SECRET_TOKEN: ${{ secrets.ZE_SECRET_TOKEN }}
       run: |
         BUILD_OUTPUT=$(pnpm build:john-deere 2>&1)
         echo "$BUILD_OUTPUT"
@@ -41,6 +43,8 @@ jobs:
     
     - name: Build Kubota app
       id: build-kubota
+      env:
+        ZE_SECRET_TOKEN: ${{ secrets.ZE_SECRET_TOKEN }}
       run: |
         BUILD_OUTPUT=$(pnpm build:kubota 2>&1)
         echo "$BUILD_OUTPUT"
@@ -52,6 +56,8 @@ jobs:
     
     - name: Build New Holland app
       id: build-new-holland
+      env:
+        ZE_SECRET_TOKEN: ${{ secrets.ZE_SECRET_TOKEN }}      
       run: |
         BUILD_OUTPUT=$(pnpm build:new-holland 2>&1)
         echo "$BUILD_OUTPUT"
