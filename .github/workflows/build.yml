@@ -1,0 +1,111 @@
+name: Build All Apps
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - uses: pnpm/action-setup@v4
+      with:
+        version: 9
+    
+    - name: Use Node.js 22
+      uses: actions/setup-node@v4
+      with:
+        node-version: 22
+        cache: 'pnpm'
+    
+    - name: Install dependencies
+      run: pnpm install --frozen-lockfile
+    
+    - name: Build John Deere app
+      id: build-john-deere
+      run: |
+        BUILD_OUTPUT=$(pnpm build:john-deere 2>&1)
+        echo "$BUILD_OUTPUT"
+        
+        # Extract URL from the output
+        JD_URL=$(echo "$BUILD_OUTPUT" | grep -o 'https://[^ ]*' | tail -1)
+        echo "john_deere_url=$JD_URL" >> $GITHUB_OUTPUT
+      working-directory: apps/host
+    
+    - name: Build Kubota app
+      id: build-kubota
+      run: |
+        BUILD_OUTPUT=$(pnpm build:kubota 2>&1)
+        echo "$BUILD_OUTPUT"
+        
+        # Extract URL from the output
+        KUBOTA_URL=$(echo "$BUILD_OUTPUT" | grep -o 'https://[^ ]*' | tail -1)
+        echo "kubota_url=$KUBOTA_URL" >> $GITHUB_OUTPUT
+      working-directory: apps/host
+    
+    - name: Build New Holland app
+      id: build-new-holland
+      run: |
+        BUILD_OUTPUT=$(pnpm build:new-holland 2>&1)
+        echo "$BUILD_OUTPUT"
+        
+        # Extract URL from the output
+        NH_URL=$(echo "$BUILD_OUTPUT" | grep -o 'https://[^ ]*' | tail -1)
+        echo "new_holland_url=$NH_URL" >> $GITHUB_OUTPUT
+      working-directory: apps/host
+    
+    - name: Comment PR with build URLs
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const john_deere_url = '${{ steps.build-john-deere.outputs.john_deere_url }}';
+          const kubota_url = '${{ steps.build-kubota.outputs.kubota_url }}';
+          const new_holland_url = '${{ steps.build-new-holland.outputs.new_holland_url }}';
+
+          const comment = `## White Label Applications Built Successfully
+
+          | White Label | Status | URL |
+          |-------------|--------|-----|
+          | John Deere | ✅ | ${john_deere_url || 'No URL found'} |
+          | Kubota | ✅ | ${kubota_url || 'No URL found'} |
+          | New Holland | ✅ | ${new_holland_url || 'No URL found'} |
+
+          ---
+          *This status will be updated on every commit to this PR.*`;
+
+          // Find existing comment
+          const { data: comments } = await github.rest.issues.listComments({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: context.issue.number,
+          });
+
+          const botComment = comments.find(comment => 
+            comment.user.type === 'Bot' && 
+            comment.body.includes('White Label Applications')
+          );
+
+          if (botComment) {
+            // Update existing comment
+            await github.rest.issues.updateComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              comment_id: botComment.id,
+              body: comment
+            });
+          } else {
+            // Create new comment
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: comment
+            });
+          }
