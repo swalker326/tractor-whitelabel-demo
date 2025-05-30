@@ -1,5 +1,5 @@
 {
-  "name": "@tractor/host",
+  "name": "@tractor-white-label/host",
   "private": true,
   "version": "1.0.0",
   "scripts": {

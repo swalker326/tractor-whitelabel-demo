@@ -1,5 +1,5 @@
 {
-  "name": "api",
+  "name": "@tractor-white-label/api",
   "scripts": {
     "dev": "wrangler dev",
     "deploy": "wrangler deploy --minify",
