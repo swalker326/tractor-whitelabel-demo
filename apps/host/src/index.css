@@ -1,0 +1,2 @@
+@import "tailwindcss";
+@source inline("p-4 text-white gap-4 space-x-4 text-2xl items-center justify-center flex flex-col text-white border-b-2 border-transparent {hover:,}border-white");

@@ -1,0 +1,58 @@
+{
+  "id": "john-deere",
+  "orgId": "john-deere",
+  "theme": {
+    "colors": {
+      "primary": "#367C2B",
+      "secondary": "#FFDE00",
+      "accent": "#000000",
+      "neutral": "#4B4B4D",
+      "background": "#FFFFFF",
+      "foreground": "#1A1A1A",
+      "error": "#DC2626",
+      "warning": "#FFDE00",
+      "success": "#367C2B"
+    },
+    "fonts": {
+      "sans": "Arial, Helvetica, sans-serif",
+      "serif": "Georgia, serif",
+      "mono": "Consolas, monospace"
+    },
+    "borderRadius": {
+      "sm": "0.125rem",
+      "md": "0.375rem",
+      "lg": "0.5rem",
+      "xl": "0.75rem"
+    },
+    "spacing": {
+      "base": "1rem"
+    }
+  },
+  "remoteModules": {
+    "remote": {
+      "path": "/remote",
+      "url": "https://production-remote-addapar-remote-swalker326-ze.firstry.dev/remoteEntry.js",
+      "module": "remote/App"
+    },
+    "dashboard": {
+      "path": "/dashboard",
+      "url": "https://dashboard.example.com/remoteEntry.js",
+      "module": "dashboard/Main"
+    },
+    "analytics": {
+      "path": "/analytics",
+      "url": "https://analytics.example.com/remoteEntry.js",
+      "module": "analytics/App"
+    }
+  },
+  "features": {
+    "enableAnalytics": true,
+    "enableReporting": true,
+    "enableAdvancedSearch": true
+  },
+  "branding": {
+    "appName": "John Deere Portal",
+    "logo": "https://cdn.brandfetch.io/idUgsqXMoD/theme/dark/symbol.svg?c=1dxbfHSJFAPEGdCLU4o5B",
+    "favicon": "https://cdn.brandfetch.io/idUgsqXMoD/w/400/h/400/icon.jpeg?c=1dxbfHSJFAPEGdCLU4o5B"
+  }
+}
